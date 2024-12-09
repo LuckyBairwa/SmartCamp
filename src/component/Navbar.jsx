@@ -67,7 +67,12 @@ export default function Navbar() {
 
         {/* Team Name */}
         <div className="hidden lg:block text-xl font-semibold text-blue-400">
-          Tech Titans
+          <Link 
+            to={`https://www.instagram.com/tech_titans_004?igsh=ZXp3YjNrbDNicm14`}
+            target="_blank"
+          >
+            Tech Titans
+          </Link>
         </div>
 
         {/* Hamburger Menu for mobile */}

@@ -5,21 +5,47 @@ export default function LeaveApplication({ setStudents }) {
   const [formData, setFormData] = useState({
     name: "",
     rollNumber: "",
-    email: "",
     reason: "",
     startDate: "",
     endDate: "",
   });
 
+  const [error, setError] = useState(""); // State to hold validation error messages
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    // Clear the error message when the user makes a change
+    if (name === "startDate" || name === "endDate") {
+      setError("");
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Validate date range
+    const startDate = new Date(formData.startDate);
+    const endDate = new Date(formData.endDate);
+    const minDate = new Date("2024-08-01");
+    const maxDate = new Date("2025-04-30");
+
+    if (startDate < minDate || startDate > maxDate) {
+      setError("Start Date must be between 1st August 2024 and 30th April 2025.");
+      return;
+    }
+
+    if (endDate < minDate || endDate > maxDate) {
+      setError("End Date must be between 1st August 2024 and 30th April 2025.");
+      return;
+    }
+
+    if (endDate < startDate) {
+      setError("End Date cannot be earlier than Start Date.");
+      return;
+    }
 
     // Fetch existing students from localStorage
     const existingStudents = JSON.parse(localStorage.getItem("students")) || [];
@@ -52,6 +78,7 @@ export default function LeaveApplication({ setStudents }) {
               name="name"
               value={formData.name}
               onChange={handleChange}
+              placeholder="Enter your full name"
               className="w-full border-b border-gray-400 focus:outline-none focus:border-blue-500"
               required
             />
@@ -66,6 +93,7 @@ export default function LeaveApplication({ setStudents }) {
               name="rollNumber"
               value={formData.rollNumber}
               onChange={handleChange}
+              placeholder="Enter your roll number"
               className="w-full border-b border-gray-400 focus:outline-none focus:border-blue-500"
               required
             />
@@ -79,6 +107,7 @@ export default function LeaveApplication({ setStudents }) {
               name="reason"
               value={formData.reason}
               onChange={handleChange}
+              placeholder="Enter the reason for leave"
               className="w-full border-b border-gray-400 focus:outline-none focus:border-blue-500"
               rows="3"
               required
@@ -114,6 +143,9 @@ export default function LeaveApplication({ setStudents }) {
               />
             </div>
           </div>
+          {error && (
+            <p className="text-red-500 text-sm mt-2">{error}</p>
+          )}
           <button
             type="submit"
             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition w-full"

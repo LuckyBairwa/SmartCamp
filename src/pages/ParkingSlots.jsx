@@ -131,6 +131,7 @@ export default function ParkingSlots() {
             >
               <option value="Car">Car</option>
               <option value="Bike">Bike</option>
+              <option value="Scooty">Scooty</option>
             </select>
           </div>
           <div>
